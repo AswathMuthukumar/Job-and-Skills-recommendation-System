@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Recommendations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://png.pngtree.com/thumb_back/fw800/background/20231019/pngtree-morning-office-work-laptop-calculator-and-stationery-on-a-textured-blue-image_13643059.png'); /* Add your background image URL here */
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            position: relative;
+        }
+
+        .overlay {
+            background: rgba(0, 0, 0, 0.5); /* Dark overlay for better text visibility */
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+
+        form {
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.8); /* Light background for the form */
+            border-radius: 10px;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        select, input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        button {
+            background-color: #4CAF50; /* Green */
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #45a049; /* Darker green */
+        }
+
+        h2 {
+            margin-top: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+            margin: 10px 0;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            button {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    <h1>Job Recommendations</h1>
+    <form method="POST">
+        <label for="choice">What do you want to find?</label><br>
+        <select name="choice" id="choice" required>
+            <option value="recommendations">Job Recommendations</option>
+            <option value="skills">Skills for a Specific Job</option>
+            <option value="company">Company for a Specific Job</option>
+        </select><br><br>
+        
+        <div id="recommendations_input">
+            <label for="skills">Enter your skills (comma separated):</label><br>
+            <input type="text" id="skills" name="skills">
+        </div>
+
+        <div id="job_input" style="display: none;">
+            <label for="job_title">Enter a job title:</label><br>
+            <input type="text" id="job_title" name="job_title" required>
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        const choiceSelect = document.getElementById('choice');
+        const recommendationsInput = document.getElementById('recommendations_input');
+        const jobInput = document.getElementById('job_input');
+
+        choiceSelect.addEventListener('change', function() {
+            if (this.value === 'recommendations') {
+                recommendationsInput.style.display = 'block';
+                jobInput.style.display = 'none';
+            } else {
+                recommendationsInput.style.display = 'none';
+                jobInput.style.display = 'block';
+            }
+        });
+    </script>
+
+    {% if recommendations %}
+    <h2>Recommended Jobs:</h2>
+    <ul>
+        {% for job in recommendations %}
+        <li>
+            <strong>{{ job.job_title }}</strong><br>
+            Skills: {{ job.skills }}<br>
+            Company: {{ job.company }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if skills_needed %}
+    <h2>Skills Required:</h2>
+    <p>{{ skills_needed }}</p>
+    {% endif %}
+
+    {% if company_name %}
+    <h2>Company Offering the Job:</h2>
+    <p>{{ company_name }}</p>
+    {% endif %}
+</body>
+</html>
